@@ -1,4 +1,4 @@
-# ResearchProjectGP
+# ResearchProjectGPP
 ## Finite state machines and behavior trees
 
 ### Goal
