@@ -10,7 +10,11 @@ Finite state machines, FSM for short, use states and transitions for their logic
 
 ##### Hierarchical FSM
 To take away part of this complexity, you can use hierarchical finite state machines. These are basically layered state machines, in which a state can - but doesnt necessarily - hold another FSM. This makes complex behavior simpler to build up, as you can make overarching states that then deal with the current situation by refining the agent's behavior further with another FSM.
-In a shooter foar example, the AI of a gangmember could look something like this:
+In a shooter for example, the AI of a gangmember could look something like this:
+
+![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/HierarchicalFSM.png)
+
+With this, you only have to deal with two relatively simple finite state machines, instead of one giant FSM. Tracking down errors and fixing them will also become easier.
 
 #### transition problems - Remembering last used state
 If your FSM begins getting complex, another problem pops up. Take this simple scenario: a mouse goes out to search cheese ( = starting state), if he found cheese, he returns to his hole, and if the cursor somes to close, he runs away.
@@ -38,3 +42,18 @@ In the case of the mouse and the cheese, this would mean that going between "sea
 
 #### Transition problems - State oscillation
 It can happen that AI switches really fast between two states, causing jittery behavior known as "state oscillation". This is a problem withing the transtions. For example, if on transition checks if `speed > 10.f`, and the returning transition checks if `speed < 10.f`, it is possible for an agent to quickly switch between the two states if it's speed is hovering around this 10.f. Better would be to check for > 11.f and < 9.f.
+
+#### State predictability and complexity - Fuzzy state machines
+If you want multiple behaviors and conditions to smoothly work together, you will need a lot of different states. To go back to our gangmember trying to kill the player, you could have these states: shoot player while in car, shoot player while on foot, chase player while in car, shace player while on foot. If we break these down, we get these four different behaviors: shoot player, chase player, drive car, run. What if we could keep these apart and still create all of the needed, more specific behaviors?
+For this, a Fuzzy state machine, or FuSM, can be a solution.
+An FuSM doesnt have any transitions, instead, it only keeps track of variables that are important to the decision making - things like health, enemies in sight, ammo etc. Based on these values, it will use fuzzy logic to compute what states should be active and to what degree. This makes it possible to have multiple states running at the same time, and like this is would be possible to keep the number of states to a minimum, as you can combine different states into new ones.
+With this, a normal, clean-cut and obvious (on/off) FSM becomes more unpredictable, and while the setup of an FuSM might be more difficult than the setup of a another kind of FSM, it will keep states and combinations of states simpler once build correctly.
+
+#### Resources used on FSM
+* normal / stackbased / hierarchical FSM:
+  * https://gamedevelopment.tutsplus.com/tutorials/finite-state-machines-theory-and-implementation--gamedev-11867
+  * https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/previousinformation/artificialintelligence1finitestatemachines/2016%20Tutorial%208%20-%20Finite%20State%20Machines.pdf
+* Fuzzy state machines and fuzzy logic:
+  * https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/previousinformation/artificialintelligence1finitestatemachines/2016%20Tutorial%208%20-%20Finite%20State%20Machines.pdf
+  * http://www.byond.com/forum/post/37966
+  * https://flylib.com/books/en/2.71.1.296/1/
