@@ -7,8 +7,19 @@ I will look into both finite state machines and behavior trees to find out their
 ### FSM
 Finite state machines, FSM for short, use states and transitions for their logic. A state *does* something, while a transition *checks* something. Normally, every state has at least one transition. One transition would be used to either go away from this state, in case this particular one only needs to be called once at the start of the game, or go to this state, for example when the character dies. States can have mulitple transitions, both incoming and outgoing, and with that, a first problem pops up: FSMs can get really complex really quickly. If you keep in mind that every state *can* have two transitions (back and forth) for every other state, and AI rarely has only 2 or 3 states, the structure of an FSM becomes almost spiderweb-like - only less clean and even less easy to manage. This complexity can make debugging of transitions really, really difficult.
 
-If you FSM begins getting complex, another problem pops up. Take this simple scenario: a mouse goes out to search cheese ( = starting state), if he found cheese, he returns to his hole, and if the cursor somes to close, he runs away.
+If your FSM begins getting complex, another problem pops up. Take this simple scenario: a mouse goes out to search cheese ( = starting state), if he found cheese, he returns to his hole, and if the cursor somes to close, he runs away.
 
 ![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/SimpleFSM_1.png)
 
-THis will give no problems: when the cursor moves away, the mouse will automatically go back to finding cheese. Yet with this small FSM, there is one weird thing going on: once th mouse has cheese, he will not run away from the cursor anymore. If this cursor represents a cat, this mouse is, at the moment, quit suicidal, no? TO fix this, we can do this:
+This will give no problems: when the cursor moves away, the mouse will automatically go back to finding cheese. Yet with this small FSM, there is one weird thing going on: once th mouse has cheese, he will not run away from the cursor anymore. If this cursor represents a cat, this mouse is, at the moment, quit suicidal, no? To fix this, we can do this:
+
+![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/SimpleFSM_2.png)
+
+Now, the mouse will also run away when he found cheese - great! But hold on, there's still a problem: if the mouse stops running away, what state should it return to? The transitions only check if the cursor is close or far away, not if the mouse is carrying cheese or not. Now, in this simple FSM, you could simply add this to the transitions: one transition would become "has cheese and cursor is far away" and the other "hos no cheese and cursor is far away". In small scale finite state machines, this is manageable - after all, if you only have a few states and a few transitions, one extra transition won't change that much.
+Now imagine having to do this in a complex state machine, with tens of states and many transitions - if you need another transition for every small change in behavior, this machine's transitions will become a hell of bools and enums.
+Now, there is a way to avoid this. Stack-based finite state machines will automoatically return to the last used state. In the case of the mouse, it would "remember" it was searching cheese, and after runnign away far enough, would automatically go back to finding cheese. The same goes for already having cheese.
+
+#### Stack-based FSM
+Instead of simply keeping the "current state" in the FSM, it will keep a stack of what states are active - any LIFO container or container capable of LIFO will do.
+Every state is responsilbe for it's own popping, and for the pushing of another state on this stack. This means that the function `SetState(FSMState state)` int the FSM class will be replaced by these two functions: `PushState(FSMState state)` and `PopState()`.
+In the case of the mouse and the cheese, this would mean that going between "search cheese" and "go home" will both pop and push a state, while going to "run" will only push a state. When "run" pops itself when it's not necessary anymore, the state left on the stack will be the previously used state - either "go home" or "search cheese", and the FSM will automatically go back to this state.
