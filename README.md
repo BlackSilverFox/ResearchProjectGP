@@ -44,7 +44,19 @@ In the case of the mouse and the cheese, this would mean that going between "sea
 It can happen that AI switches really fast between two states, causing jittery behavior known as "state oscillation". This is a problem withing the transtions. For example, if on transition checks if `speed > 10.f`, and the returning transition checks if `speed < 10.f`, it is possible for an agent to quickly switch between the two states if it's speed is hovering around this 10.f. Better would be to check for > 11.f and < 9.f.
 
 #### State predictability and complexity - Fuzzy state machines
-If you want multiple behaviors and conditions to smoothly work together, you will need a lot of different states. To go back to our gangmember trying to kill the player, you could have these states: shoot player while in car, shoot player while on foot, chase player while in car, shace player while on foot. If we break these down, we get these four different behaviors: shoot player, chase player, drive car, run. What if we could keep these apart and still create all of the needed, more specific behaviors?<br/>
+If you want multiple behaviors and conditions to smoothly work together, you will need a lot of different states. To go back to our gangmember trying to kill the player, you could have these states:
+* shoot player while in car
+* shoot player while on foot
+* chase player while in car
+* chase player while on foot
+
+If we break these down, we get these four different behaviors:
+* shoot player
+* chase player
+* drive car
+* run
+
+What if we could keep these apart and still create all of the needed, more specific behaviors?<br/>
 For this, a Fuzzy state machine, or FuSM, can be a solution.
 An FuSM doesn't have any transitions explicitly linked to states, instead, it only keeps track of variables that are important to the decision making - things like health, enemies in sight, ammo etc. You could see these as transition too, as they indeed are still some form of check - just know that these kind of transition *are not directly linked to states* anymore. Based on these variables, it will use fuzzy logic to compute what states should be active and to what degree. This makes it possible to have multiple states running at the same time, and like this is would be possible to keep the number of states to a minimum, as you can combine different states into new ones.<br/>
 With this, a normal, clean-cut and obvious (on/off) FSM becomes more unpredictable, and while the setup of an FuSM might be more difficult than the setup of another kind of FSM, it will keep states and combinations of states simpler once build correctly.
