@@ -21,7 +21,7 @@ If your FSM begins getting complex, another problem pops up. Take this simple sc
 
 ![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/SimpleFSM_1.png)
 
-This will give no problems: when the cursor moves away, the mouse will automatically go back to finding cheese. Yet with this small FSM, there is one weird thing going on: once the mouse has cheese, he will not run away from the cursor anymore. If this cursor represents a cat, this mouse is, at the moment, quite suicidal, no? To fix this, we can do this:
+This will give no problems: when the cursor moves away, the mouse will automatically go back to finding cheese. Yet with this small FSM, there is one weird thing going on: once the mouse has cheese, he will not run away from the cursor anymore. If this cursor represents a cat, this mouse is quite suicidal, no? To fix this, we can do this:
 
 ![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/SimpleFSM_2.png)
 
@@ -32,7 +32,7 @@ Now, there is a way to avoid this. Stack-based finite state machines will automa
 ##### Stack-based FSM
 Instead of simply keeping the "current state" in the FSM, it will keep a stack of what states are active - any LIFO (Last In First Out) container or container capable of LIFO will do.<br/>
 Every state is responsible for it's own popping, and for the pushing of another state on this stack. This means that the function `SetState(FSMState state)` in the FSM class will be replaced by these two functions: `PushState(FSMState state)` and `PopState()`.<br/>
-In the case of the mouse and the cheese, this would mean that going between "search cheese" and "go home" will both pop and push a state, while going to "run" will only push a state. When "run" pops itself when it's not necessary anymore, the state left on the stack will be the previously used state - either "go home" or "search cheese", and the FSM will automatically go back to this state.
+In the case of the mouse and the cheese, this would mean that going between "search cheese" and "go home" will both pop and push a state, while going to "run" will only push a state. When "run" pops itself, the state that's left on the stack will be the previously used state - either "go home" or "search cheese", and the FSM will automatically go back to this state.
 
 ![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/stackBasdFSM.gif)
 
