@@ -69,3 +69,13 @@ With this, a normal, clean-cut and obvious (on/off) FSM becomes more unpredictab
   * https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/previousinformation/artificialintelligence1finitestatemachines/2016%20Tutorial%208%20-%20Finite%20State%20Machines.pdf
   * http://www.byond.com/forum/post/37966
   * https://flylib.com/books/en/2.71.1.296/1/
+
+### BT
+#### Structure
+As the name says, behavior trees (BT) are trees consisting of nodes. These nodes have different functions and are grouped in composites, decorators and leafs.
+Each of these nodes will return a status:
+* Running
+* Success
+* Failure
+
+As the behavior tree gets traversed, nodes will return these statuses until there are no more options left or untill Success is returned to the root, effectively stopping the search for that frame.
