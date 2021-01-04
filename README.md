@@ -81,5 +81,9 @@ Each of these nodes will return a status:
 As the behavior tree gets traversed, nodes will return these statuses until there are no more options left or untill Success is returned to the root, effectively stopping the search for that frame.
 
 #### The nodes - Composites
-Composites determine how these statuses are returned to the parentnode. There are several composites, but let's talk about the two most used ones.
+Composites determine how and if it ticks its children. Relying on the returned statuses to decide over this, they are surprisingly simple in structure.
 ##### Sequence
+Let's look at a code snippet first.
+![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/CodeSnippet_SequenceUpdate.png)
+This is how a sequence deals with the returned statuses of its children. It first ticks on the first child, captures the returned status, and if this status is anything but success, the sequence terminates by returning this non-success status. In other words: a sequence will keep going through it's children as long as these children return success. If the sequence runs out of children to check for their status, the sequence is completed and will return success itself.
+By the way, if you were wondering about the difference between the Update() and Tick(), this codesnippet should explain it:
