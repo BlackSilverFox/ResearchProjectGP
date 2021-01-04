@@ -120,6 +120,10 @@ Of course, the opposite also exists: a node that will always return failure (or 
 ##### Repeater
 These nodes can either keep repeating a behavior untill the child returns failure, or repeat a behavior N times. This way, you can avoid having duplicate nodes to mimic "do action x N times".
 
+![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/Decorator_Repeater.png)
+
+Let's say the goal of this part of the tree is to shoot the player n times. The repeater node will keep calling the sequence untill either this sequence returns failure or untill n is reached. with the conditions, you can still check if the player is for example still in FOV and if the npc has ammo left to shoot with. 
+
 #### The nodes - leaf nodes
 We're almost there! We have nodes that decide when children are ticked on, nodes that can change the returned status, or actively tick on their child a number of times, yet we don't have any nodes that actually change something in our gameworld.<br/>
 To accomplish these changes, we have two types of nodes that are not as iron-cast in it's contents as for example composite nodes are. These nodes are written based on what is needed, but will still return the normal failure, success, or running, meaning the way the flow works stays the same.
