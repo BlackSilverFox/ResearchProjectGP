@@ -147,3 +147,15 @@ If you are not working in an editor that visualizes the tree for you, it might a
 
 ##### Custom nodes
 Another way of tuning down the depth of such a tree could be by making more composite nodes. If you see you are using a certain combination of nodes many times over, you can choose to wrap this in a seperate composite class, making your tree more readable and probably easier to debug. However, only make these kind of nodes when you are absolutely certain you can use it a lot. *Do not make these nodes at the very start*. A few of these in the right spots will make your tree more readable, but too many of these custom nodes for too little cases and it will turn that advantage upside down, making your tree harder to read and debug.
+
+#### Resources used on BT
+* Code snippets:
+ * http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter06_The_Behavior_Tree_Starter_Kit.pdf
+* Large behavior tree picture:
+ * https://en.wikipedia.org/wiki/Behavior_tree
+* Game Ai Pro chapters used (http://www.gameaipro.com/):
+ * http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter06_The_Behavior_Tree_Starter_Kit.pdf
+ * http://www.gameaipro.com/GameAIPro3/GameAIPro3_Chapter09_Overcoming_Pitfalls_in_Behavior_Tree_Design.pdf
+* General resources:
+ * https://www.gamasutra.com/blogs/ChrisSimpson/20140717/221339/Behavior_trees_for_AI_How_they_work.php
+ * https://www.behaviortree.dev/decoratornode/
