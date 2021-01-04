@@ -161,7 +161,32 @@ Another way of tuning down the depth of such a tree could be by making more comp
   * https://www.behaviortree.dev/decoratornode/
 
 ### Implementation of both FSM and BT in the zombie project
-When trying to make the bot AI, I at first sketching only a BT. However, this behavior tree ended up getting really large, plus I was still getting used to how the tree worked, so I made a lot of mistakes in this sketch. On top of that, other students with large trees ended up having the compiler run out of heap space, having to restructure the tree into smaller chunks.
-After playing with some ideas and "rules" I would need to make my bot survive, I realized that there are only 3 (or 4, depending on how you group things) different ways of handling things, and that switching between these main groups need a very small amount of checks. This immediatly made me think of finite state machines.
-On top of that, one of these groups could be done by a simple functioncall to a algorithm, and didn't even need a full behavior tree to work.
+When trying to make the bot AI, I at first sketching only a BT. However, this behavior tree ended up getting really large, plus I was still getting used to how the tree worked, so I made a lot of mistakes in this sketch. On top of that, other students with large trees ended up having the compiler run out of heap space, having to restructure the tree into smaller chunks.<br/>
+After playing with some ideas and "rules" I would need to make my bot survive, I realized that there are only 3 (or 4, depending on how you group things) different ways of handling things, and that switching between these main groups need a very small amount of checks. This immediatly made me think of finite state machines.<br/>
+On top of that, one of these groups could be done by a simple functioncall to a algorithm, and didn't even need a full behavior tree to work.<br/>
 I ended up with this structure:
+
+![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/FSM_ZombieAI.png)
+
+For the transitions, I only have three:
+* Enemy spotted
+* Item/house spotted
+* None spotted
+"None spotted" means I can safely explore, and it is this state that simply does a call to the pathfinding algorithm.<br/>
+On the other hand, if I do spot something, whether that be a house, an item, or an enemy, my bot needed to do a lot more and more complex behavior, so here I did use a behavior tree.<br/>
+I ended up with two small behavior trees (although I do have some comments on this - more on that later) and one simple state machine. Easy to follow the logic, easy to debug, easy to maintain.
+
+### Remarks
+I made the implementation *before* looking in-depth into finite state machines and behavior trees, just using the knowledge and experience gained during the semester.
+This caused me to make some mistakes in my use of mainly the behavior tree, although in this small project it ended up not making that much of a difference.
+For starters, I never use the "running" status, although there might be some situations where this could have been handy - searching a house for example, as zombies *normally* do not enter those (it does happen, mainly in later levels). <br/>
+Secondly - and probably the biggest issue - is the size of my conditionals and actions. I did *not* go with the "keep it as simpe and reusable as possible". Part of this is my inexperience with behavior trees, part of it came from my wish to keep the trees as small as possible, causing me to do extra checks inside the conditions and behaviors.<br/>
+For the zombie AI, this worked out well, but I do realize that in bigger projects, this would quickly become a mess.
+
+### Result
+By combining both FSM and BT, I was able to keep the structure in general very simple and easy to read.<br/>
+On the FSM side, it made it possible to use a small state machine as "folders" for the more complex "content". I did not end up with lots of transitions, the states were very clearly defined, there were no "go from this state first to that state, then to this one and *then* make it possible to connect with the larger bunch again", which sometimes happened when doing animations in UE in another project.<br/>
+On the BT side, the trees simply stayed smaller, as part of the checks happened in the state machine. This made it a lot easier to build up the tree and keep track of what was happening. I did notice, however, that debugging stayed more difficult then the debugging of an FSM is.<br/>
+In my experience, this was caused mainly by these things:
+* A BT is called every frame. This means couting variables or info about what got called causes spam that can be difficult to decipher. On top of that, if you need to break in certain situations only, this also gets more difficult.
+* Unlike an FSM, that uses classes for both states and transitions and has an `OnEnter()` and `OnExit()` that makes checking things really easy, in a BT, actions and conditions are functioncalls that happen in a derived class. This weaves into the first point of the BT being called every frame, and again makes it difficult to see what is happening.
