@@ -100,10 +100,10 @@ Let's start with a code snippet again:
 
 ![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/CodeSnippet_SelectorUpdate.png)
 
-The `Update()` of a selector is almost the same as the `Update()` of a sequence. The only differences are that it checks if the current child returned anything but failure to terminate and return that status, and that it returns failure when it reaches the end of it's children. This means that a selector will keep going untill it finds a child that returns either running or success, and terminates when it does so.
+The `Update()` of a selector is almost the same as the `Update()` of a sequence. The only differences are that it checks if the current child returned anything but failure to terminate and that it returns failure when it reaches the end of its children. This means that a selector will keep going untill it finds a child that returns either running or success, and terminates when it does so.
 
 ##### Other composites
-Of course, there are more composites then just these two. There are parallels, filters, monitors, and anything else you can think of and has a good reason to be in your specific usecase. However, most of these are simpy sequences or selectors with a little bit added on top of them. A parallel for example is simply a sequence (it goes over all its children) that counts the successes and failures, and only returns success or failure itself when certain conditions are met. These conditions might be "return failure if 2 children returned failure", and "return success if 3 children returned success". Don't be deceived by the name "parallel", it still runs its children in sequence!
+Of course, there are more composites then just these two. There are parallels, filters, monitors, and anything else you can think of and has a good reason to be in your specific usecase. However, most of these are simply sequences or selectors with a little bit added on top of them. A parallel for example is a sequence (it goes over all its children) that counts the successes and failures, and only returns success or failure itself when certain conditions are met. These conditions might be "return failure if 2 children returned failure", and "return success if 3 children returned success". Don't be deceived by the name "parallel", it still runs its children in sequence!
 
 #### The nodes - decorators
 Decorators are nodes that only have one child and are small pieces of utility that do something with their child, either with the status it returns, or how many times it's called etc.
@@ -114,8 +114,8 @@ Very simple yet very useful. This decorator node will simply invert the returned
 ![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/Decorator_Inverter.png)
 
 ##### ForceSuccess
-Even simpler. This will *always* return success, no matter the status of is child. Again, you can use this in places where you don't want a failure to mess up the flow in your sequences or selectors - or any other composites, for that matter. Do be aware that running will stay running, and will not become success.<br/>
-Of course, the opposite also exists: a node that will always return failure (or running), called ForceFailure.
+Even simpler. This will *always* return success, no matter the status of its child. Again, you can use this in places where you don't want a failure to mess up the flow in your sequences or selectors - or any other composites, for that matter. Do be aware that running will stay running, and will not become success.<br/>
+Of course, the opposite also exists: a node that will always return failure, called ForceFailure.
 
 ##### Repeater
 These nodes can either keep repeating a behavior untill the child returns failure, or repeat a behavior N times. This way, you can avoid having duplicate nodes to mimic "do action x N times".
@@ -126,13 +126,13 @@ Let's say the goal of this part of the tree is to shoot the player n times. The 
 
 #### The nodes - leaf nodes
 We're almost there! We have nodes that decide when children are ticked on, nodes that can change the returned status, or actively tick on their child a number of times, yet we don't have any nodes that actually change something in our gameworld.<br/>
-To accomplish these changes, we have two types of nodes that are not as iron-cast in it's contents as for example composite nodes are. These nodes are written based on what is needed, but will still return the normal failure, success, or running, meaning the way the flow works stays the same.
+To accomplish these changes, we have two types of nodes that are not as iron-cast in its contents as for example composite nodes are. These nodes are written based on what is needed, but will still return the normal failure, success, or running, meaning the way the flow works, stays the same.
 
-##### Conditionals
+##### Conditional
 Conditionals, are, well, conditions. It can return success or failure and, together with an inverter, can be used in both the "this should happen" and "this shouldn't happen" scenario's, without having to write another conditional.
 
 ##### Action
-Often used in tandem with Conditionals in a Sequence, as this way you can *first* check the conditional, and in case this returned success, *then* go on to the action. Actions are the nodes that actually bring changes to the gameworld, by letting the npc directly do something. These leafnodes can return any of the satuses. Take the example of "walking from point a to b":
+Often used in tandem with conditionals in a sequence, as this way you can *first* check the conditional, and in case this returned success, *then* go on to the action. Actions are the nodes that actually bring changes to the gameworld, by letting the npc directly do something. These leafnodes can return any of the satuses. Take the example of "walking from point a to b":
 * Cannot find path: return failure.
 * Found path, following it: return running.
 * Has reached point b: return success.
@@ -143,10 +143,10 @@ Behavior trees can get really deep really fast. You should try to keep your cond
 
 ![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/Behavior_Tree_Larger_System.png)
 
-If you are not working in an editor that visualizes the tree for you, it might also be a good idea to make and keep your own visualization of your tree. You do not want to have a tree like the one above *only* in pure code, as that could make for some difficult tracking down of possible paths your AI took to get this or that behavior.
+If you are not working in an editor that visualizes the tree for you, it might also be a good idea to make and keep your own visualization of your tree. You do not want to have a tree like the one above *only* in pure code, as that could make for some difficult tracking down of possible paths your AI took to get to this or that behavior.
 
 ##### Custom nodes
-Another way of tuning down the depth of such a tree could be by making more composite nodes. If you see you are using a certain combination of nodes many times over, you can choose to wrap this in a seperate composite class, making your tree more readable and probably easier to debug. However, only make these kind of nodes when you are absolutely certain you can use it a lot. *Do not make these nodes at the very start*. A few of these in the right spots will make your tree more readable, but too many of these custom nodes for too little cases and it will turn that advantage upside down, making your tree harder to read and debug.
+Another way of tuning down the depth of such a tree could be by making more composite nodes. If you see you are using a certain combination of nodes many times over, you can choose to wrap this in a seperate composite class, making your tree more readable and probably easier to debug. However, only make these kind of nodes when you are absolutely certain you can use it a lot. *Do not make these nodes at the very start*. A few of these in the right spots will make your tree more readable, but too many of these custom nodes for too little cases will turn that advantage upside down, making your tree harder to read and debug.
 
 #### Resources used on BT
 * Code snippets:
@@ -161,17 +161,19 @@ Another way of tuning down the depth of such a tree could be by making more comp
   * https://www.behaviortree.dev/decoratornode/
 
 ### Implementation of both FSM and BT in the zombie project
-When trying to make the bot AI, I at first sketching only a BT. However, this behavior tree ended up getting really large, plus I was still getting used to how the tree worked, so I made a lot of mistakes in this sketch. On top of that, other students with large trees ended up having the compiler run out of heap space, having to restructure the tree into smaller chunks.<br/>
-After playing with some ideas and "rules" I would need to make my bot survive, I realized that there are only 3 (or 4, depending on how you group things) different ways of handling things, and that switching between these main groups need a very small amount of checks. This immediatly made me think of finite state machines.<br/>
-On top of that, one of these groups could be done by a simple functioncall to a algorithm, and didn't even need a full behavior tree to work.<br/>
+When trying to make the bot AI, I at first started sketching only a BT. However, this behavior tree ended up getting really large, plus I was still getting used to how the tree worked, so I made a lot of mistakes in this sketch. On top of that, other students with large trees ended up having the compiler run out of heap space, having to restructure the tree into smaller chunks.<br/>
+After playing with some ideas and "rules" I would need to make my bot survive, I realized that there are only 3 (or 4, depending on how you group things) different ways of handling things, and that switching between these main groups needed a very small amount of checks. This immediatly made me think of finite state machines.<br/>
+On top of that, one of these groups could be done by a simple functioncall to an algorithm, and didn't even need a full behavior tree to work.<br/>
 I ended up with this structure:
 
 ![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/FSM_ZombieAI.png)
 
 For the transitions, I only have three:
+
 * Enemy spotted
 * Item/house spotted
 * None spotted
+
 "None spotted" means I can safely explore, and it is this state that simply does a call to the pathfinding algorithm.<br/>
 On the other hand, if I do spot something, whether that be a house, an item, or an enemy, my bot needed to do a lot more and more complex behavior, so here I did use a behavior tree.<br/>
 I ended up with two small behavior trees (although I do have some comments on this - more on that later) and one simple state machine. Easy to follow the logic, easy to debug, easy to maintain.
@@ -179,8 +181,8 @@ I ended up with two small behavior trees (although I do have some comments on th
 ### Remarks
 I made the implementation *before* looking in-depth into finite state machines and behavior trees, just using the knowledge and experience gained during the semester.
 This caused me to make some mistakes in my use of mainly the behavior tree, although in this small project it ended up not making that much of a difference.
-For starters, I never use the "running" status, although there might be some situations where this could have been handy - searching a house for example, as zombies *normally* do not enter those (it does happen, mainly in later levels). <br/>
-Secondly - and probably the biggest issue - is the size of my conditionals and actions. I did *not* go with the "keep it as simpe and reusable as possible". Part of this is my inexperience with behavior trees, part of it came from my wish to keep the trees as small as possible, causing me to do extra checks inside the conditions and behaviors.<br/>
+For starters, I never use the "running" status or decorators, although there might be some situations where this could have been handy - searching a house for example, as I visit multiple corners and need to track how many corners I did, while also picking up items in the meantime. <br/>
+Secondly - and probably the biggest issue - is the size of my conditionals and actions. I did *not* go with the "keep it as simple and reusable as possible". Part of this is my inexperience with behavior trees, part of this came from my wish to keep the trees as small as possible, causing me to do extra checks inside the conditions and behaviors.<br/>
 For the zombie AI, this worked out well, but I do realize that in bigger projects, this would quickly become a mess.
 
 ### Result
@@ -197,4 +199,4 @@ Another thing I have noticed, is that FSM states are handy because they have the
 
 ### Conclusion
 Using the FSM and BT combo turned out to really help the development of the AI, as I was able to more clearly see distinctions between the different groups of behaviors. While it is equally possible to do the same with only a BT (and of course also with an FSM, although I would not want to try this given how many states and transitions you can get), programming-wise, it was definitely easier to go with this hybrid.<br/>
-And of course, I also noticed I lacked real, more in-depth understanding of behavior trees, although things turned out well in this particular project. I will definitely look more into behavior trees, although I might start by using an editor first. Combining the knowledge I have right now with setting up an AI tree in Unreal Engine, in combinatoin with another project, should get me started on understanding the flow and uses of all the different nodes better, after which I can start looking into their actual code.
+And of course, I also noticed I lacked real, more in-depth understanding of behavior trees, although things turned out well in this particular project. I will definitely look more into behavior trees, although I might start by using an editor first. Combining the knowledge I have right now with setting up an AI tree in Unreal Engine, in combination with another project, should get me started on understanding the flow and uses of all the different nodes better, after which I can start looking into their actual code.
