@@ -6,7 +6,7 @@ I will look into both finite state machines and behavior trees to find out their
 
 ### FSM
 #### Structure
-Finite state machines, FSM for short, use states and transitions for their logic. A state *does* something, while a transition *checks* something. Normally, every state has at least one transition. One transition would be used to either go away from this state, in case this particular one only needs to be called once at the start of the game, or go to this state, for example when the character dies. States can have mulitple transitions, both incoming and outgoing, and with that, a first problem pops up: FSM's can get really complex really quickly. If you keep in mind that every state *can* have two transitions (back and forth) for every other state, and AI rarely has only 2 or 3 states, the structure of an FSM becomes almost spiderweblike - only less clean and even less easy to manage. This complexity can make debugging of transitions really, really difficult.
+Finite state machines, FSM for short, use states and transitions for their logic. A state *does* something, while a transition *checks* something. Normally, every state has at least one transition. One transition would be used to either go away from this state, in case this particular one only needs to be called once at the start of the game, or go to this state, for example when the character dies. States can have multiple transitions, both incoming and outgoing, and with that, a first problem pops up: FSM's can get really complex really quickly. If you keep in mind that every state *can* have two transitions (back and forth) for every other state, and AI rarely has only 2 or 3 states, the structure of an FSM becomes almost spiderweblike - only less clean and even less easy to manage. This complexity can make debugging of transitions really, really difficult.
 
 ##### Hierarchical FSM
 To take away part of this complexity, you can use hierarchical finite state machines. These are basically layered state machines, in which a state can (but doesnt necessarily) hold another FSM. This makes complex behavior simpler to build up, as you can make overarching states that then deal with the current situation by refining the agent's behavior further with another FSM.<br/>
@@ -131,5 +131,9 @@ Often used in tandem with Conditionals in a Sequence, as this way you can *first
 * Found path, following it: return running.
 * Has reached point b: return success.
 
-#### Back to structure
-Okay, we got to the end. We can finally build our tree. Let me give you an example of a simple tree:
+#### Pitfalls
+##### Complexity
+Behavior trees can get really deep really fast. You should try to keep your conditionals and actions as simple and as reusable as possible, but that also means that for accomplishing one thing, you need more nodes. One way of keeping the behavior tree a bit more readable is by layering the trees, where an action node calls another tree for example.
+
+##### Custom nodes
+Another way of tuning down the depth of such a tree could be by making more composite nodes. If you see you are using a certain combination of nodes many times over, you can choose to wrap this in a seperate composite class, making your tree more readable and probably easier to debug. However, only make these kind of nodes when you are absolutely certain you can use it a lot. *Do not make these nodes at the very start*. A few of these in the right spots will make your tree more readable, but too many of these custom nodes for too little cases and it will turn that advantage upside down, making your tree harder to read and debug.
