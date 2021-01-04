@@ -141,5 +141,7 @@ Often used in tandem with Conditionals in a Sequence, as this way you can *first
 ##### Complexity
 Behavior trees can get really deep really fast. You should try to keep your conditionals and actions as simple and as reusable as possible, but that also means that for accomplishing one thing, you need more nodes. One way of keeping the behavior tree a bit more readable is by layering the trees, where an action node calls another tree for example.
 
+![alt text](https://en.wikipedia.org/wiki/Behavior_tree#/media/File:Integrated_Behavior_Tree_Larger_System.png)
+
 ##### Custom nodes
 Another way of tuning down the depth of such a tree could be by making more composite nodes. If you see you are using a certain combination of nodes many times over, you can choose to wrap this in a seperate composite class, making your tree more readable and probably easier to debug. However, only make these kind of nodes when you are absolutely certain you can use it a lot. *Do not make these nodes at the very start*. A few of these in the right spots will make your tree more readable, but too many of these custom nodes for too little cases and it will turn that advantage upside down, making your tree harder to read and debug.
