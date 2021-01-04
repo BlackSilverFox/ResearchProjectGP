@@ -72,7 +72,7 @@ With this, a normal, clean-cut and obvious (on/off) FSM becomes more unpredictab
 
 ### BT
 #### Structure
-As the name says, behavior trees (BT) are trees consisting of nodes. These nodes have different functions and are grouped according to usage in composites, decorators and leafs.
+As the name says, behavior trees (BT) are trees consisting of nodes. These nodes have different functions and are grouped according to usage in composites, decorators and leafs.<br/>
 Each of these nodes will return a status:
 * Running
 * Success
@@ -87,10 +87,11 @@ Let's look at a code snippet first.
 
 ![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/CodeSnippet_SequenceUpdate.png)
 
-This is how a sequence deals with the returned statuses of its children. It first ticks on the first child, captures the returned status, and if this status is anything but success, the sequence terminates by returning this non-success status. In other words: a sequence will keep going through it's children as long as these children return success. If the sequence runs out of children to check for their status, the sequence is completed and will return success itself.
+This is how a sequence deals with the returned statuses of its children. It first ticks on the first child, captures the returned status, and if this status is anything but success, the sequence terminates by returning this non-success status. In other words: a sequence will keep going through it's children as long as these children return success. If the sequence runs out of children to check for their status, the sequence is completed and will return success itself.<br/>
 By the way, if you were wondering about the difference between the `Update()` and `Tick()`, this codesnippet should explain it:
 
 ![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/CodeSnippet_UpdateAndTick.png)
 
 `Tick()` checks if this ticked behavior is called for the first time, and if it is, it will *first* do whatever is needed to get this behavior started, and only then update itself. This `Update()` will for example be the sequence's update, which then calls `Tick()` on a child, and so on. `Tick()` can call `OnTerminate()` whenever the behavior is not needed anymore, and is placed directly after the call to `Update()`, so it terminates in the same frame if necessary.
 ##### Selector
+Let's start with a codesnippet again:
