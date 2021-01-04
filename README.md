@@ -3,7 +3,6 @@
 
 ### Goal
 I will look into both finite state machines and behavior trees to find out their pro's and cons, then combine these two decision making structures to try and keep as many of these pro's and negate or reduce the cons.
-### BT
 
 ### FSM
 #### Structure
@@ -189,5 +188,13 @@ By combining both FSM and BT, I was able to keep the structure in general very s
 On the FSM side, it made it possible to use a small state machine as "folders" for the more complex "content". I did not end up with lots of transitions, the states were very clearly defined, there were no "go from this state first to that state, then to this one and *then* make it possible to connect with the larger bunch again", which sometimes happened when doing animations in UE in another project.<br/>
 On the BT side, the trees simply stayed smaller, as part of the checks happened in the state machine. This made it a lot easier to build up the tree and keep track of what was happening. I did notice, however, that debugging stayed more difficult then the debugging of an FSM is.<br/>
 In my experience, this was caused mainly by these things:
+
 * A BT is called every frame. This means couting variables or info about what got called causes spam that can be difficult to decipher. On top of that, if you need to break in certain situations only, this also gets more difficult.
 * Unlike an FSM, that uses classes for both states and transitions and has an `OnEnter()` and `OnExit()` that makes checking things really easy, in a BT, actions and conditions are functioncalls that happen in a derived class. This weaves into the first point of the BT being called every frame, and again makes it difficult to see what is happening.
+
+Of course, part of this is the face that I *always* traverse the tree, and didn't make use of decorators and the "running" status.<br/>
+Another thing I have noticed, is that FSM states are handy because they have the capability to store member variables, while in my behavior trees, I relied solely on the blackboard to get data. In some cases this would have been better if I had a member variable, like for the interface pointer: this data never gets changed (and should not get changed either) in the blackboard, *and* is used in almost every action and condition. Having a direct pointer to the Interface would be really handy. Using functors and/or using a wrapperclass instead of pure functions might be a way to get these membervariables in without having to throw over the whole design of the trees nodes.
+
+### Conclusion
+Using the FSM and BT combo turned out to really help the development of the AI, as I was able to more clearly see distinctions between the different groups of behaviors. While it is equally possible to do the same with only a BT (and of course also with an FSM, although I would not want to try this given how many states and transitions you can get), programming-wise, it was definitely easier to go with this hybrid.<br/>
+And of course, I also noticed I lacked real, more in-depth understanding of behavior trees, although things turned out well in this particular project. I will definitely look more into behavior trees, although I might start by using an editor first. Combining the knowledge I have right now with setting up an AI tree in Unreal Engine, in combinatoin with another project, should get me started on understanding the flow and uses of all the different nodes better, after which I can start looking into their actual code.
