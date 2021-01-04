@@ -150,12 +150,12 @@ Another way of tuning down the depth of such a tree could be by making more comp
 
 #### Resources used on BT
 * Code snippets:
- * http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter06_The_Behavior_Tree_Starter_Kit.pdf
+  * http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter06_The_Behavior_Tree_Starter_Kit.pdf
 * Large behavior tree picture:
- * https://en.wikipedia.org/wiki/Behavior_tree
+  * https://en.wikipedia.org/wiki/Behavior_tree
 * Game Ai Pro chapters used (http://www.gameaipro.com/):
- * http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter06_The_Behavior_Tree_Starter_Kit.pdf
- * http://www.gameaipro.com/GameAIPro3/GameAIPro3_Chapter09_Overcoming_Pitfalls_in_Behavior_Tree_Design.pdf
+  * http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter06_The_Behavior_Tree_Starter_Kit.pdf
+  * http://www.gameaipro.com/GameAIPro3/GameAIPro3_Chapter09_Overcoming_Pitfalls_in_Behavior_Tree_Design.pdf
 * General resources:
- * https://www.gamasutra.com/blogs/ChrisSimpson/20140717/221339/Behavior_trees_for_AI_How_they_work.php
- * https://www.behaviortree.dev/decoratornode/
+  * https://www.gamasutra.com/blogs/ChrisSimpson/20140717/221339/Behavior_trees_for_AI_How_they_work.php
+  * https://www.behaviortree.dev/decoratornode/
