@@ -12,18 +12,18 @@ Finite state machines, FSM for short, use states and transitions for their logic
 To take away part of this complexity, you can use hierarchical finite state machines. These are basically layered state machines, in which a state can (but doesnt necessarily) hold another FSM. This makes complex behavior simpler to build up, as you can make overarching states that then deal with the current situation by refining the agent's behavior further with another FSM.<br/>
 In a shooter for example, the AI of a gangmember could look something like this:
 
-![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/HierarchicalFSM.png)
+![alt text](https://github.com/JudithVerdonckJV/ResearchProjectGP/blob/main/HierarchicalFSM.png)
 
 With this, you only have to deal with two relatively simple finite state machines, instead of one giant FSM. Tracking down errors and fixing them will also become easier.
 
 #### Transition problems - Remembering last used state
 If your FSM begins getting complex, another problem pops up. Take this simple scenario: a mouse goes out to search cheese ( = starting state), if he found cheese, he returns to his hole, and if the cursor somes to close, he runs away.
 
-![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/SimpleFSM_1.png)
+![alt text](https://github.com/JudithVerdonckJV/ResearchProjectGP/blob/main/SimpleFSM_1.png)
 
 This will give no problems: when the cursor moves away, the mouse will automatically go back to finding cheese. Yet with this small FSM, there is one weird thing going on: once the mouse has cheese, he will not run away from the cursor anymore. If this cursor represents a cat, this mouse is quite suicidal, no? To fix this, we can do this:
 
-![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/SimpleFSM_2.png)
+![alt text](https://github.com/JudithVerdonckJV/ResearchProjectGP/blob/main/SimpleFSM_2.png)
 
 Now, the mouse will also run away when he found cheese - great! But hold on, there's still a problem: if the mouse stops running away, what state should it return to? The transitions only check if the cursor is close or far away, not if the mouse is carrying cheese or not. In this small FSM, you could simply add this to the transitions: one transition would become "has cheese and cursor is far away" and the other "has no cheese and cursor is far away". In small scale finite state machines, this is manageable - after all, if you only have a few states and a few transitions, one extra transition won't change that much.
 Now imagine having to do this in a complex state machine, with tens of states and many transitions - if you need another transition for every small change in behavior, this machine's transitions will become a hell of bools and enums.<br/>
@@ -34,7 +34,7 @@ Instead of simply keeping the "current state" in the FSM, it will keep a stack o
 Every state is responsible for it's own popping, and for the pushing of another state on this stack. This means that the function `SetState(FSMState state)` in the FSM class will be replaced by these two functions: `PushState(FSMState state)` and `PopState()`.<br/>
 In the case of the mouse and the cheese, this would mean that going between "search cheese" and "go home" will both pop and push a state, while going to "run" will only push a state. When "run" pops itself, the state that's left on the stack will be the previously used state - either "go home" or "search cheese", and the FSM will automatically go back to this state.
 
-![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/stackBasdFSM.gif)
+![alt text](https://github.com/JudithVerdonckJV/ResearchProjectGP/blob/main/stackBasdFSM.gif)
 
 *push and pop combinations of states - grey states are the active ones*
 
@@ -86,19 +86,19 @@ Composites determine how and if it ticks its children. Relying on the returned s
 ##### Sequence
 Let's look at a code snippet first.
 
-![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/CodeSnippet_SequenceUpdate.png)
+![alt text](https://github.com/JudithVerdonckJV/ResearchProjectGP/blob/main/CodeSnippet_SequenceUpdate.png)
 
 This is how a sequence deals with the returned statuses of its children. It first ticks on the first child, captures the returned status, and if this status is anything but success, the sequence terminates by returning this non-success status. In other words: a sequence will keep going through it's children as long as these children return success. If the sequence runs out of children to check for their status, the sequence is completed and will return success itself.<br/>
 By the way, if you were wondering about the difference between the `Update()` and `Tick()`, this code snippet should explain it:
 
-![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/CodeSnippet_UpdateAndTick.png)
+![alt text](https://github.com/JudithVerdonckJV/ResearchProjectGP/blob/main/CodeSnippet_UpdateAndTick.png)
 
 `Tick()` checks if this ticked behavior is called for the first time, and if it is, it will *first* do whatever is needed to get this behavior started, and only then update itself. This `Update()` will for example be the sequence's update, which then calls `Tick()` on a child, and so on. `Tick()` can call `OnTerminate()` whenever the behavior is not needed anymore, and is placed directly after the call to `Update()`, so it terminates in the same frame if necessary.
 
 ##### Selector
 Let's start with a code snippet again:
 
-![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/CodeSnippet_SelectorUpdate.png)
+![alt text](https://github.com/JudithVerdonckJV/ResearchProjectGP/blob/main/CodeSnippet_SelectorUpdate.png)
 
 The `Update()` of a selector is almost the same as the `Update()` of a sequence. The only differences are that it checks if the current child returned anything but failure to terminate and that it returns failure when it reaches the end of its children. This means that a selector will keep going untill it finds a child that returns either running or success, and terminates when it does so.
 
@@ -111,7 +111,7 @@ Decorators are nodes that only have one child and are small pieces of utility th
 ##### Inverter
 Very simple yet very useful. This decorator node will simply invert the returned status of it's child, which makes it possible to have for example only one condition written out, yet used for opposited goals. Take the condition "is player in FOV" for example. You might want to check for a success in one part of the tree, but a failure in another part. With an inverter decorator node, you can use the same condition without messing up how your sequences and selectors work.
 
-![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/Decorator_Inverter.png)
+![alt text](https://github.com/JudithVerdonckJV/ResearchProjectGP/blob/main/Decorator_Inverter.png)
 
 ##### ForceSuccess
 Even simpler. This will *always* return success, no matter the status of its child. Again, you can use this in places where you don't want a failure to mess up the flow in your sequences or selectors - or any other composites, for that matter. Do be aware that running will stay running, and will not become success.<br/>
@@ -120,7 +120,7 @@ Of course, the opposite also exists: a node that will always return failure, cal
 ##### Repeater
 These nodes can either keep repeating a behavior untill the child returns failure, or repeat a behavior N times. This way, you can avoid having duplicate nodes to mimic "do action x N times".
 
-![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/Decorator_Repeater.png)
+![alt text](https://github.com/JudithVerdonckJV/ResearchProjectGP/blob/main/Decorator_Repeater.png)
 
 Let's say the goal of this part of the tree is to shoot the player n times. The repeater node will keep calling the sequence untill either this sequence returns failure or untill n is reached. with the conditions, you can still check if the player is for example still in FOV and if the npc has ammo left to shoot with. 
 
@@ -141,7 +141,7 @@ Often used in tandem with conditionals in a sequence, as this way you can *first
 ##### Complexity
 Behavior trees can get really deep really fast. You should try to keep your conditionals and actions as simple and as reusable as possible, but that also means that for accomplishing one thing, you need more nodes. One way of keeping the behavior tree a bit more readable is by layering the trees, where an action node calls another tree for example.
 
-![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/Behavior_Tree_Larger_System.png)
+![alt text](https://github.com/JudithVerdonckJV/ResearchProjectGP/blob/main/Behavior_Tree_Larger_System.png)
 
 If you are not working in an editor that visualizes the tree for you, it might also be a good idea to make and keep your own visualization of your tree. You do not want to have a tree like the one above *only* in pure code, as that could make for some difficult tracking down of possible paths your AI took to get to this or that behavior.
 
@@ -166,7 +166,7 @@ After playing with some ideas and "rules" I would need to make my bot survive, I
 On top of that, one of these groups could be done by a simple functioncall to an algorithm, and didn't even need a full behavior tree to work.<br/>
 I ended up with this structure:
 
-![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/FSM_ZombieAI.png)
+![alt text](https://github.com/JudithVerdonckJV/ResearchProjectGP/blob/main/FSM_ZombieAI.png)
 
 For the transitions, I only have three:
 
