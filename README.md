@@ -82,16 +82,54 @@ As the behavior tree gets traversed, nodes will return these statuses until ther
 
 #### The nodes - Composites
 Composites determine how and if it ticks its children. Relying on the returned statuses to decide over this, they are surprisingly simple in structure.
+
 ##### Sequence
 Let's look at a code snippet first.
 
 ![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/CodeSnippet_SequenceUpdate.png)
 
 This is how a sequence deals with the returned statuses of its children. It first ticks on the first child, captures the returned status, and if this status is anything but success, the sequence terminates by returning this non-success status. In other words: a sequence will keep going through it's children as long as these children return success. If the sequence runs out of children to check for their status, the sequence is completed and will return success itself.<br/>
-By the way, if you were wondering about the difference between the `Update()` and `Tick()`, this codesnippet should explain it:
+By the way, if you were wondering about the difference between the `Update()` and `Tick()`, this code snippet should explain it:
 
 ![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/CodeSnippet_UpdateAndTick.png)
 
 `Tick()` checks if this ticked behavior is called for the first time, and if it is, it will *first* do whatever is needed to get this behavior started, and only then update itself. This `Update()` will for example be the sequence's update, which then calls `Tick()` on a child, and so on. `Tick()` can call `OnTerminate()` whenever the behavior is not needed anymore, and is placed directly after the call to `Update()`, so it terminates in the same frame if necessary.
+
 ##### Selector
-Let's start with a codesnippet again:
+Let's start with a code snippet again:
+
+![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/CodeSnippet_SelectorUpdate.png)
+
+The `Update()` of a selector is almost the same as the `Update()` of a sequence. The only differences are that it checks if the current child returned anything but failure to terminate and return that status, and that it returns failure when it reaches the end of it's children. This means that a selector will keep going untill it finds a child that returns either running or success, and terminates when it does so.
+
+##### Other composites
+Of course, there are more composites then just these two. There are parallels, filters, monitors, and anything else you can think of and has a good reason to be in your specific usecase. However, most of these are simpy sequences or selectors with a little bit added on top of them. A parallel for example is simply a sequence (it goes over all its children) that counts the successes and failures, and only returns success or failure itself when certain conditions are met. These conditions might be "return failure if 2 children returned failure", and "return success if 3 children returned success". Don't be deceived by the name "parallel", it still runs its children in sequence!
+
+#### The nodes - decorators
+Decorators are nodes that only have one child and are small pieces of utility that do something with their child, either with the status it returns, or how many times it's called etc.
+
+##### Inverter
+Very simple yet very useful. This decorator node will simply invert the returned status of it's child, which makes it possible to have for example only one condition written out, yet used for opposited goals. Take the condition "is player in FOV" for example. You might want to check for a success in one part of the tree, but a failure in another part. With an inverter decorator node, you can use the same condition without messing up how your sequences and selectors work.
+
+##### ForceSuccess
+Even simpler. This will *always* return success, no matter the status of is child. Again, you can use this in places where you don't want a failure to mess up the flow in your sequences or selectors - or any other composites, for that matter. Do be aware that running will stay running, and will not become success.<br/>
+Of course, the opposite also exists: a node that will always return failure (or running), called ForceFailure.
+
+##### Repeater
+These nodes can either keep repeating a behavior untill the child returns failure, or repeat a behavior N times. This way, you can avoid having duplicate nodes to mimic "do action x N times".
+
+#### The nodes - leaf nodes
+We're almost there! We have nodes that decide when children are ticked on, nodes that can change the returned status, or actively tick on their child a number of times, yet we don't have any nodes that actually change something in our gameworld.<br/>
+To accomplish these changes, we have two types of nodes that are not as iron-cast in it's contents as for example composite nodes are. These nodes are written based on what is needed, but will still return the normal failure, success, or running, meaning the way the flow works stays the same.
+
+##### Conditionals
+Conditionals, are, well, conditions. It can return success or failure and, together with an inverter, can be used in both the "this should happen" and "this shouldn't happen" scenario's, without having to write another conditional.
+
+##### Action
+Often used in tandem with Conditionals in a Sequence, as this way you can *first* check the conditional, and in case this returned success, *then* go on to the action. Actions are the nodes that actually bring changes to the gameworld, by letting the npc directly do something. These leafnodes can return any of the satuses. Take the example of "walking from point a to b":
+* Cannot find path: return failure.
+* Found path, following it: return running.
+* Has reached point b: return success.
+
+#### Back to structure
+Okay, we got to the end. We can finally build our tree. Let me give you an example of a simple tree:
