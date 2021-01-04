@@ -16,7 +16,7 @@ In a shooter for example, the AI of a gangmember could look something like this:
 
 With this, you only have to deal with two relatively simple finite state machines, instead of one giant FSM. Tracking down errors and fixing them will also become easier.
 
-#### transition problems - Remembering last used state
+#### Transition problems - Remembering last used state
 If your FSM begins getting complex, another problem pops up. Take this simple scenario: a mouse goes out to search cheese ( = starting state), if he found cheese, he returns to his hole, and if the cursor somes to close, he runs away.
 
 ![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/SimpleFSM_1.png)
@@ -72,10 +72,14 @@ With this, a normal, clean-cut and obvious (on/off) FSM becomes more unpredictab
 
 ### BT
 #### Structure
-As the name says, behavior trees (BT) are trees consisting of nodes. These nodes have different functions and are grouped in composites, decorators and leafs.
+As the name says, behavior trees (BT) are trees consisting of nodes. These nodes have different functions and are grouped according to usage in composites, decorators and leafs.
 Each of these nodes will return a status:
 * Running
 * Success
 * Failure
 
 As the behavior tree gets traversed, nodes will return these statuses until there are no more options left or untill Success is returned to the root, effectively stopping the search for that frame.
+
+#### The nodes - Composites
+Composites determine how these statuses are returned to the parentnode. There are several composites, but let's talk about the two most used ones.
+##### Sequence
