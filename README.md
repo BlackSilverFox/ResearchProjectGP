@@ -111,6 +111,8 @@ Decorators are nodes that only have one child and are small pieces of utility th
 ##### Inverter
 Very simple yet very useful. This decorator node will simply invert the returned status of it's child, which makes it possible to have for example only one condition written out, yet used for opposited goals. Take the condition "is player in FOV" for example. You might want to check for a success in one part of the tree, but a failure in another part. With an inverter decorator node, you can use the same condition without messing up how your sequences and selectors work.
 
+![alt text](https://github.com/BlackSilverFox/ResearchProjectGP/blob/main/Decorator_Inverter.png)
+
 ##### ForceSuccess
 Even simpler. This will *always* return success, no matter the status of is child. Again, you can use this in places where you don't want a failure to mess up the flow in your sequences or selectors - or any other composites, for that matter. Do be aware that running will stay running, and will not become success.<br/>
 Of course, the opposite also exists: a node that will always return failure (or running), called ForceFailure.
