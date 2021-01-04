@@ -159,3 +159,9 @@ Another way of tuning down the depth of such a tree could be by making more comp
 * General resources:
   * https://www.gamasutra.com/blogs/ChrisSimpson/20140717/221339/Behavior_trees_for_AI_How_they_work.php
   * https://www.behaviortree.dev/decoratornode/
+
+### Implementation of both FSM and BT in the zombie project
+When trying to make the bot AI, I at first sketching only a BT. However, this behavior tree ended up getting really large, plus I was still getting used to how the tree worked, so I made a lot of mistakes in this sketch. On top of that, other students with large trees ended up having the compiler run out of heap space, having to restructure the tree into smaller chunks.
+After playing with some ideas and "rules" I would need to make my bot survive, I realized that there are only 3 (or 4, depending on how you group things) different ways of handling things, and that switching between these main groups need a very small amount of checks. This immediatly made me think of finite state machines.
+On top of that, one of these groups could be done by a simple functioncall to a algorithm, and didn't even need a full behavior tree to work.
+I ended up with this structure:
