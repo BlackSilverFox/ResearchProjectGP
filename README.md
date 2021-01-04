@@ -2,7 +2,7 @@
 ## Finite state machines and behavior trees
 
 ### Goal
-I will look into both finite state machines and behavior trees to find out their pro's and cons, then combine these two decision making structures to try and keep as many of these pro's and negate or reduce the cons.
+I will look into both finite state machines and behavior trees to find out their pro's and cons, then combine these two decision making structures to try and keep as many of these pro's and negate or reduce the cons. Comparing my findings about FSM's and BT's in general with the findings in my own implementation, I will look into how well this hybrid worked out and whether it is viable.
 
 ### FSM
 #### Structure
