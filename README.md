@@ -194,7 +194,7 @@ In my experience, this was caused mainly by these things:
 * A BT is called every frame. This means couting variables or info about what got called causes spam that can be difficult to decipher. On top of that, if you need to break in certain situations only, this also gets more difficult.
 * Unlike an FSM, that uses classes for both states and transitions and has an `OnEnter()` and `OnExit()` that makes checking things really easy, in a BT, actions and conditions are functioncalls that happen in a derived class. This weaves into the first point of the BT being called every frame, and again makes it difficult to see what is happening.
 
-Of course, part of this is the face that I *always* traverse the tree, and didn't make use of decorators and the "running" status.<br/>
+Of course, part of this is the fact that I *always* traverse the tree, and didn't make use of decorators and the "running" status.<br/>
 Another thing I have noticed, is that FSM states are handy because they have the capability to store member variables, while in my behavior trees, I relied solely on the blackboard to get data. In some cases this would have been better if I had a member variable, like for the interface pointer: this data never gets changed (and should not get changed either) in the blackboard, *and* is used in almost every action and condition. Having a direct pointer to the Interface would be really handy. Using functors and/or using a wrapperclass instead of pure functions might be a way to get these membervariables in without having to throw over the whole design of the trees nodes.
 
 ### Conclusion
