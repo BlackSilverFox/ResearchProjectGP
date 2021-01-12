@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Plugin.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="SteeringBehaviour.cpp">
+      <Filter>DecisionMaking\Steering</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldGrid.cpp" />
+    <ClCompile Include="EBehaviorTree.cpp">
+      <Filter>DecisionMaking\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="EFiniteStateMachine.cpp">
+      <Filter>DecisionMaking\FiniteStateMachine</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Plugin.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="IDecisionMaking.h">
+      <Filter>DecisionMaking</Filter>
+    </ClInclude>
+    <ClInclude Include="SteeringBehaviour.h">
+      <Filter>DecisionMaking\Steering</Filter>
+    </ClInclude>
+    <ClInclude Include="BehaviorActions.h">
+      <Filter>Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="BehaviorConditions.h">
+      <Filter>Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h" />
+    <ClInclude Include="WorldGrid.h" />
+    <ClInclude Include="EBehaviorTree.h">
+      <Filter>DecisionMaking\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="EFiniteStateMachine.h">
+      <Filter>DecisionMaking\FiniteStateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="EBlackboard.h">
+      <Filter>DecisionMaking</Filter>
+    </ClInclude>
+    <ClInclude Include="States.h">
+      <Filter>Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Transitions.h">
+      <Filter>Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManagement.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="DecisionMaking">
+      <UniqueIdentifier>{7efb5c53-382c-4b07-b38d-2b0d349e41eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Behavior">
+      <UniqueIdentifier>{973071ea-2a5e-4d74-ad76-fea020fa6c30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DecisionMaking\BehaviorTree">
+      <UniqueIdentifier>{69c1c89d-2861-4385-becf-1e36a7f01e6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DecisionMaking\FiniteStateMachine">
+      <UniqueIdentifier>{43f1f9f6-c55c-4a69-9d2f-3360d0104ac9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DecisionMaking\Steering">
+      <UniqueIdentifier>{552f2cb4-4b7c-442e-baef-ec0861ae7e4a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
